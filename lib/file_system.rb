@@ -1,5 +1,5 @@
 module FileSystem
-  MODELS = %w{Layout Snippet TextAsset Page}
+  MODELS = %w{Layout Snippet TextAsset Asset Page}
 
   class << self
     def activate
