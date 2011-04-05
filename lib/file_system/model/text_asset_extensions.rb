@@ -1,15 +1,15 @@
 module FileSystem::Model::TextAssetExtensions
   # IGNORED = %w{id parent_id layout_id lock_version
   #             created_by created_at updated_by updated_at}
-  
-  def self.included(base)   
+
+  def self.included(base)
     # Instance methods
     base.class_eval do
       extend ClassMethods
       include InstanceMethods
       %w{load_file filename}.each do |m|
         alias_method_chain m.to_sym, :subfolder
-      end 
+      end
     end
     # Singleton/class methods
     class << base

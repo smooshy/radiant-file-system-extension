@@ -2,14 +2,14 @@ module FileSystem::Model::AssetExtensions
   FILENAME_REGEX = /^(?:(\d+))([^.]+)?(?:\.([\.\-\w]+))?/
   IGNORED = %w{created_by created_at updated_by updated_at}
 
-  def self.included(base)   
+  def self.included(base)
     # Instance methods
     base.class_eval do
       extend ClassMethods
       include InstanceMethods
       %w{filename save_file load_file}.each do |m|
         alias_method_chain m.to_sym, :id
-      end 
+      end
     end
     # Singleton/class methods
     class << base

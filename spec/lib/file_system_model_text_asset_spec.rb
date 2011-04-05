@@ -15,7 +15,7 @@ describe TextAsset do
   end
 
   [
-    FileSystem::Model, 
+    FileSystem::Model,
     FileSystem::Model::TextAssetExtensions,
     FileSystem::Model::TextAssetExtensions::InstanceMethods
   ].each do |module_name|
@@ -56,7 +56,7 @@ describe TextAsset do
       @model.should respond_to("#{method}_without_subfolder")
     end
   end
-  
+
   it "should return each file representing a javascript on the filesystem" do
     Dir.should_receive(:[]).with(MockTextAsset.path + "/Javascript/*").and_return(["/example_name.js"])
     MockTextAsset.javascripts.should == ["/example_name.js"]
@@ -66,7 +66,6 @@ describe TextAsset do
     Dir.should_receive(:[]).with(MockTextAsset.path + "/Stylesheet/*").and_return(["/example_name.css"])
     MockTextAsset.stylesheets.should == ["/example_name.css"]
   end
-  
 
   describe "filename" do
     describe "extension" do
@@ -110,7 +109,7 @@ describe TextAsset do
       @file_mock = mock("file_mock")
       @file_mock.should_receive(:read).and_return("Content stored in a file")
     end
-    
+
     it "should set class_name name from filename" do
       @model.should_receive(:open).with("Javascript/example_name.js").and_return(@file_mock)
       @model.load_file("Javascript/example_name.js")
@@ -128,7 +127,7 @@ describe TextAsset do
       @model.class_name = "Javascript"
       @file_mock = mock("file_mock")
     end
-    
+
     it "should save file with class_name" do
       File.should_receive(:open).
         with("#{RAILS_ROOT}/design/mock_text_assets/Javascript/example_model.js", 'w').

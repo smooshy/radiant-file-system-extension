@@ -19,7 +19,7 @@ describe Asset do
   end
 
   [
-    FileSystem::Model, 
+    FileSystem::Model,
     FileSystem::Model::AssetExtensions,
     FileSystem::Model::AssetExtensions::InstanceMethods
   ].each do |module_name|
