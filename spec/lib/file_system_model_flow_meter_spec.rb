@@ -45,7 +45,7 @@ describe FlowMeter do
     @model.should respond_to(:filename)
   end
 
-  %w{find_or_initialize_by_filename}.each do |method|
+  %w{find_or_initialize_by_filename load_files}.each do |method|
     it "should redefine #{method} class method" do
       FlowMeter.should respond_to("#{method}")
       FlowMeter.should respond_to("#{method}_with_id")
@@ -103,5 +103,5 @@ describe FlowMeter do
       @model.should_receive(:attributes).and_return(YAML.dump(@attrs))
       @model.save_file
     end
-    end
+  end
 end

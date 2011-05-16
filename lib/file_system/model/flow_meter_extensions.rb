@@ -13,7 +13,7 @@ module FileSystem::Model::FlowMeterExtensions
     end
     # Singleton/class methods
     class << base
-      %w{find_or_initialize_by_filename}.each do |m|
+      %w{find_or_initialize_by_filename load_files}.each do |m|
        alias_method_chain m.to_sym, :id
       end
     end
@@ -23,6 +23,35 @@ module FileSystem::Model::FlowMeterExtensions
     def find_or_initialize_by_filename_with_id(filename)
       id = $1.to_i if File.basename(filename) =~ FILENAME_REGEX
       find_or_initialize_by_id(id)
+    end
+
+    def load_files_with_id
+      files = Dir[path + "/**"]
+      unless files.blank?
+        records_on_filesystem = []
+        process_after_delete = []
+        files.each do |file|
+          record = find_or_initialize_by_filename(file)
+          puts "Loading #{self.name.downcase} from #{File.basename(file)}"
+          record.load_file(file)
+          begin
+            record.save!
+            records_on_filesystem << record
+          rescue
+            puts "Saving #{self.name.downcase} #{record.id} for later processing"
+            process_after_delete << record
+          end
+        end
+        fileless_db_records = records_on_database - records_on_filesystem
+        fileless_db_records.each do |item|
+          puts "Deleting #{self.name.downcase}: #{item.id}"
+          delete_record(item)
+        end
+        process_after_delete.each do |r|
+          puts "Loading #{self.name.downcase}: #{r.id}"
+          r.save
+        end
+      end
     end
   end
 
@@ -44,7 +73,6 @@ module FileSystem::Model::FlowMeterExtensions
       attrs = attrs.reject {|k,v| v.blank? }
       self.attributes = attrs
       self.id = attrs["id"]
-      save!
     end
   end
 end
